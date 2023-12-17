@@ -22,13 +22,14 @@ static const char *colors[][3]      = {
 	/*                    fg         bg         border   */
 	[SchemeNorm]      = { gray3,     black,     gray2 },
 	[SchemeSel]       = { gray4,     blue,      blue  },
+  [SchemeTitle]     = { white,     black,     black }, // active window title
   [SchemeTag]       = { gray3,     black,     black },
   [SchemeTag1]      = { blue,      black,     black },
   [SchemeTag2]      = { red,       black,     black },
   [SchemeTag3]      = { orange,    black,     black },
   [SchemeTag4]      = { green,     black,     black },
   [SchemeTag5]      = { pink,      black,     black },
-  [SchemeLayout]    = { aqua,     black,     black },
+  [SchemeLayout]    = { aqua,      black,     black },
 };
 
 /* tagging */
@@ -90,6 +91,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
@@ -103,7 +105,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 //	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
