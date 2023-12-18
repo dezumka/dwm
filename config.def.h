@@ -107,10 +107,11 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", black, "-nf", gray3, "-sb", blue, "-sf", gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *roficmd[]  = { "rofi", "-show", "drun" };
-static const char *upvol[]   = { "amixer", "set", "Master", "2%+",     NULL };
-static const char *downvol[] = { "amixer", "set", "Master", "2%-",     NULL };
-static const char *mutevol[] = { "amixer", "set", "Master", "toggle",  NULL };
+static const char *roficmd[]  = { "rofi", "-show", "drun", NULL };
+static const char *upvol[]    = { "amixer", "set", "Master", "2%+",     NULL };
+static const char *downvol[]  = { "amixer", "set", "Master", "2%-",     NULL };
+static const char *mutevol[]  = { "amixer", "set", "Master", "toggle",  NULL };
+static const char *shutdown[]  = { "shutdown", "-P", "now", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -168,6 +169,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ControlMask,           XK_q,      quit,           {0} },
+  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = shutdown} },
 };
 
 /* button definitions */
