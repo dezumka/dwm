@@ -113,9 +113,11 @@ static const char *mutevol[] = { "amixer", "set", "Master", "toggle",  NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
+  // Audio stuff
   {0,               XF86XK_AudioLowerVolume, spawn,          {.v = downvol}},
 	{0,               XF86XK_AudioMute,        spawn,          {.v = mutevol }},
 	{0,               XF86XK_AudioRaiseVolume, spawn,          {.v = upvol}},
+
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
@@ -140,7 +142,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-//	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	{ MODKEY|ControlMask,		        XK_comma,  cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
+	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
