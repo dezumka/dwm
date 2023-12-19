@@ -9,17 +9,19 @@ static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows sel
 static const unsigned int systrayonleft  = 0;   /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 1;        /* 0 means no systray */
+static const int showsystray        = 0;        /* 0 means no systray */
 static const unsigned int colorfultitle  = 1;   /* 0 means title use SchemeTitle and SchemeTitleFloat */
 static const unsigned int colorfultag    = 1;   /* 0 means use SchemeSel for selected tag */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static const unsigned int gapbarh   = 60;       /* horiz outer gap between windows and screen edge */
 static       int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int horizpadbar        = 10;        /* horizontal padding for statusbar */
+static const int floatbar           = 1;        /* 1 means the bar will float(don't have padding),0 means the bar have padding */
+static const int horizpadbar        = 6;       /* horizontal padding for statusbar */
 static const int vertpadbar         = 8;        /* vertical padding for statusbar */
 // static const char *fonts[]          = {"MesloLGS NF:pixelsize=14:antialias=true:autohint=true" ,"JetBrainsMono Nerd Font Mono:style:medium:size=11" };
 static const char *fonts[]          = {"MesloLGSDZ Nerd Font Propo:pixelsize=14:antialias=true:autohint=true" };
@@ -120,9 +122,9 @@ static const char *shutdown[]  = { "shutdown", "-P", "now", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
   // Audio stuff
-  {0,               XF86XK_AudioLowerVolume, spawn,          {.v = downvol}},
-	{0,               XF86XK_AudioMute,        spawn,          {.v = mutevol }},
-	{0,               XF86XK_AudioRaiseVolume, spawn,          {.v = upvol}},
+  {0,               XF86XK_AudioLowerVolume, spawn,          {.v = downvol} },
+	{0,               XF86XK_AudioMute,        spawn,          {.v = mutevol} },
+	{0,               XF86XK_AudioRaiseVolume, spawn,          {.v = upvol} },
 
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd } },

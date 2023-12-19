@@ -308,7 +308,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 static Atom wmatom[WMLast], netatom[NetLast], xatom[XLast];
 static int running = 1;
 static Cur *cursor[CurLast];
-static Clr **scheme;
+static Clr **scheme, clrborder;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
@@ -870,15 +870,20 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 		isCode = 0;
 	text = p;
 
-	w += 2; /* 1px padding on both sides */
-	ret = m->ww - w;
-	x = m->ww - w - getsystraywidth();
+	w += horizpadbar; /* padding on both sides */
+  if(floatbar){
+    ret = m->ww - m->gappov * 2 - borderpx - 2 * gapbarh - w;
+    x = m->ww - m->gappov * 2 - borderpx - 2 * gapbarh - w - getsystraywidth();
+  }else{
+    ret = x = m->ww - borderpx - w;
+    x = m->ww - w - getsystraywidth();
+  }
 
 	drw_setscheme(drw, scheme[LENGTH(colors)]);
 	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
 	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
-	drw_rect(drw, x, 0, w, bh, 1, 1);
-	x++;
+	drw_rect(drw, x, borderpx, w, bh, 1, 1);
+	x += horizpadbar / 2;
 
 	/* process status text */
 	i = -1;
@@ -918,7 +923,7 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 					while (text[++i] != ',');
 					int rh = atoi(text + ++i);
 
-					drw_rect(drw, rx + x, ry, rw, rh, 1, 0);
+          drw_rect(drw, rx + x, ry + borderpx + vertpadbar / 2, rw, rh, 1, 0);
 				} else if (text[i] == 'f') {
 					x += atoi(text + ++i);
 				}
@@ -944,11 +949,26 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0;
-	int boxs = drw->fonts->h / 9;
-	int boxw = drw->fonts->h / 6 + 2;
+  int x, y = borderpx, w, tw = 0, stw = 0;
+  int bh_n = bh - borderpx * 2;
+  int mw;
+  if(floatbar){
+    mw = m->ww - m->gappov * 2 - borderpx * 2 - gapbarh * 2;
+  } else {
+    mw = m->ww - borderpx * 2;
+  }
+  int boxs = drw->fonts->h / 9;
+  int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
+
+  XSetForeground(drw->dpy, drw->gc, clrborder.pixel);
+  if(floatbar){
+    // XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, m->ww - m->gappov * 2, bh);
+    XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, mw, bh);
+  }else{
+    XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, m->ww, bh);
+  }
 
 	if (!m->showbar)
 		return;
@@ -967,7 +987,7 @@ drawbar(Monitor *m)
 		if (c->isurgent)
 			urg |= c->tags;
 	}
-	x = 0;
+	x = borderpx;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
     drw_setscheme( drw, scheme[occ & 1 << i ? (m->colorfultag ? tagschemes[i] : SchemeSel): SchemeTag]);
@@ -985,7 +1005,8 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeLayout]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-	if ((w = m->ww - tw - stw - x) > bh) {
+  w = floatbar ? mw + m->gappov * 2 - tw - stw - x : mw - tw - stw - x;
+	if (w > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
@@ -993,7 +1014,11 @@ drawbar(Monitor *m)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
-			drw_rect(drw, x, 0, w, bh, 1, 1);
+      if(floatbar) {
+        drw_rect(drw, x, y, w - m->gappov * 2, bh_n, 1, 1);
+      } else {
+        drw_rect(drw, x, y, w, bh_n, 1, 1);
+      }
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
@@ -1590,10 +1615,14 @@ resize(Client *c, int x, int y, int w, int h, int interact)
 
 void
 resizebarwin(Monitor *m) {
-	unsigned int w = m->ww;
+  unsigned int w = floatbar ? m->ww - 2 * m->gappov - 2 * gapbarh : m->ww;
 	if (showsystray && m == systraytomon(m) && !systrayonleft)
 		w -= getsystraywidth();
-	XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, w, bh);
+  if (floatbar) {
+    XMoveResizeWindow(dpy, m->barwin, m->wx + m->gappov + gapbarh, m->by, w, bh);
+  } else {
+    XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, w, bh);
+  }
 }
 
 void
@@ -1950,6 +1979,7 @@ setup(void)
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], 3);
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
+  drw_clr_create(drw, &clrborder, col_borderbar);
 	/* init system tray */
 	updatesystray();
 	/* init bars */
@@ -2257,9 +2287,16 @@ updatebarpos(Monitor *m)
 	m->wy = m->my;
 	m->wh = m->mh;
 	if (m->showbar) {
-		m->wh -= bh;
-		m->by = m->topbar ? m->wy : m->wy + m->wh;
-		m->wy = m->topbar ? m->wy + bh : m->wy;
+    if(floatbar){
+      m->wh = m->wh - m->gappoh - bh;
+      m->by = m->topbar ? m->wy + m->gappoh : m->wy + m->wh;
+    }else{
+      m->wh -= bh;
+      m->by = m->topbar ? m->wy : m->wy + m->wh;
+    }
+    if (m->topbar){
+      m->wy = floatbar ? bh + gappoh : bh;
+    }
 	} else
 		m->by = -bh;
 }
@@ -2484,7 +2521,7 @@ updatesystray(void)
 	XWindowChanges wc;
 	Client *i;
 	Monitor *m = systraytomon(NULL);
-	unsigned int x = m->mx + m->mw;
+  unsigned int x = floatbar ? m->mx + m->mw - m->gappov : m->mx + m->mw;
 	unsigned int sw = TEXTW(stext) - lrpad + systrayspacing;
 	unsigned int w = 1;
 
