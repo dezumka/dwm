@@ -22,7 +22,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int horizpadbar        = 10;        /* horizontal padding for statusbar */
 static const int vertpadbar         = 8;        /* vertical padding for statusbar */
 // static const char *fonts[]          = {"MesloLGS NF:pixelsize=14:antialias=true:autohint=true" ,"JetBrainsMono Nerd Font Mono:style:medium:size=11" };
-static const char *fonts[]          = {"MesloLGSDZ Nerd Font:pixelsize=14:antialias=true:autohint=true" ,"JetBrainsMono Nerd Font Mono:style:medium:size=11" };
+static const char *fonts[]          = {"MesloLGSDZ Nerd Font Propo:pixelsize=14:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 
 // theme
@@ -43,7 +43,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "󰇍", "󰇎" };
+static const char *tags[] = { "", "", "", "", "󰇎" };
 
 static const int tagschemes[] = {
     SchemeTag1, SchemeTag2, SchemeTag3, SchemeTag4, SchemeTag5
@@ -61,7 +61,11 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Chromium", NULL,       NULL,       1 << 2,       0,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 2,       0,           -1 },
+	{ "steam",    NULL,       NULL,       1 << 3,       0,            1 },
+	{ "cs2",      NULL,       NULL,       1 << 3,       0,            0 },
+	{ "code",     NULL,       NULL,       1,            0,           -1 },
 };
 
 /* layout(s) */
@@ -145,6 +149,7 @@ static const Key keys[] = {
   { MODKEY|ControlMask,           XK_d,      incrgaps,       {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[5]} },
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[11]} },
