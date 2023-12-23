@@ -872,8 +872,8 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 
 	w += horizpadbar; /* padding on both sides */
   if(floatbar){
-    ret = m->ww - m->gappov * 2 - borderpx - 2 * gapbarh - w;
-    x = m->ww - m->gappov * 2 - borderpx - 2 * gapbarh - w - getsystraywidth();
+    ret = m->ww - borderpx - 2 * gapbarh - w;
+    x = m->ww - borderpx - 2 * gapbarh - w - getsystraywidth();
   }else{
     ret = x = m->ww - borderpx - w;
     x = m->ww - w - getsystraywidth();
@@ -953,7 +953,7 @@ drawbar(Monitor *m)
   int bh_n = bh - borderpx * 2;
   int mw;
   if(floatbar){
-    mw = m->ww - m->gappov * 2 - borderpx * 2 - gapbarh * 2;
+    mw = m->ww - borderpx * 2 - gapbarh * 2;
   } else {
     mw = m->ww - borderpx * 2;
   }
@@ -1005,7 +1005,7 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeLayout]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-  w = floatbar ? mw + m->gappov * 2 - tw - stw - x : mw - tw - stw - x;
+  w = floatbar ? mw + gapbarh * 2 - tw - stw - x : mw - tw - stw - x;
 	if (w > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
@@ -1015,7 +1015,7 @@ drawbar(Monitor *m)
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
       if(floatbar) {
-        drw_rect(drw, x, y, w - m->gappov * 2, bh_n, 1, 1);
+        drw_rect(drw, x, y, w - gapbarh * 2, bh_n, 1, 1);
       } else {
         drw_rect(drw, x, y, w, bh_n, 1, 1);
       }
@@ -1615,11 +1615,11 @@ resize(Client *c, int x, int y, int w, int h, int interact)
 
 void
 resizebarwin(Monitor *m) {
-  unsigned int w = floatbar ? m->ww - 2 * m->gappov - 2 * gapbarh : m->ww;
+  unsigned int w = floatbar ? m->ww - 2 * gapbarh : m->ww;
 	if (showsystray && m == systraytomon(m) && !systrayonleft)
 		w -= getsystraywidth();
   if (floatbar) {
-    XMoveResizeWindow(dpy, m->barwin, m->wx + m->gappov + gapbarh, m->by, w, bh);
+    XMoveResizeWindow(dpy, m->barwin, m->wx + gapbarh, m->by, w, bh);
   } else {
     XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, w, bh);
   }

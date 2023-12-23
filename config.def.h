@@ -16,8 +16,8 @@ static const unsigned int gappih    = 10;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
-static const unsigned int gapbarh   = 60;       /* horiz outer gap between windows and screen edge */
-static       int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
+static const unsigned int gapbarh   = 250;       /* horiz outer gap between windows and screen edge */
+static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int floatbar           = 1;        /* 1 means the bar will float(don't have padding),0 means the bar have padding */
@@ -149,6 +149,7 @@ static const Key keys[] = {
   // overall gaps
   { MODKEY|ControlMask,           XK_i,      incrgaps,       {.i = +1 } },
   { MODKEY|ControlMask,           XK_d,      incrgaps,       {.i = -1 } },
+  { MODKEY|ControlMask,           XK_g,      togglegaps,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[5]} },
