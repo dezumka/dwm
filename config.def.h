@@ -16,13 +16,14 @@ static const unsigned int gappih    = 10;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
-static const unsigned int gapbarh   = 250;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gapbarh   = 280;      /* horiz outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int floatbar           = 1;        /* 1 means the bar will float(don't have padding),0 means the bar have padding */
-static const int horizpadbar        = 6;       /* horizontal padding for statusbar */
+static const int horizpadbar        = 6;        /* horizontal padding for statusbar */
 static const int vertpadbar         = 8;        /* vertical padding for statusbar */
+static const int decorhints         = 1;        /* 1 means respect decoration hints */
 // static const char *fonts[]          = {"MesloLGS NF:pixelsize=14:antialias=true:autohint=true" ,"JetBrainsMono Nerd Font Mono:style:medium:size=11" };
 static const char *fonts[]          = {"MesloLGSDZ Nerd Font Propo:pixelsize=14:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
@@ -36,7 +37,7 @@ static const char *colors[][3]      = {
 	[SchemeSel]       = { gray4,     blue,      blue  },
   [SchemeTitle]     = { white,     black,     black }, // active window title
   [SchemeTag]       = { gray3,     black,     black },
-  [SchemeTag1]      = { blue,      black,     black },
+  [SchemeTag1]      = { lightblue, black,     black },
   [SchemeTag2]      = { red,       black,     black },
   [SchemeTag3]      = { orange,    black,     black },
   [SchemeTag4]      = { green,     black,     black },
@@ -45,7 +46,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "󰇎" };
+static const char *tags[] = { "", "", "", "", "󰇎" };
 
 static const int tagschemes[] = {
     SchemeTag1, SchemeTag2, SchemeTag3, SchemeTag4, SchemeTag5
