@@ -66,9 +66,7 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Chromium", NULL,       NULL,       1 << 2,       0,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 2,       0,           -1 },
-	{ "steam",    NULL,       NULL,       1 << 3,       0,            1 },
-	{ "cs2",      NULL,       NULL,       1 << 3,       0,            0 },
-	{ "code",     NULL,       NULL,       1,            0,           -1 },
+	{ "Code",     NULL,       NULL,       1 << 1,       0,           -1 },
 };
 
 /* layout(s) */
@@ -112,12 +110,13 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", black, "-nf", gray3, "-sb", blue, "-sf", gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
-static const char *roficmd[]  = { "rofi", "-show", "drun", NULL };
-static const char *upvol[]    = { "amixer", "set", "Master", "2%+",     NULL };
-static const char *downvol[]  = { "amixer", "set", "Master", "2%-",     NULL };
-static const char *mutevol[]  = { "amixer", "set", "Master", "toggle",  NULL };
+static const char *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", black, "-nf", gray3, "-sb", blue, "-sf", gray4, NULL };
+static const char *termcmd[]   = { "st", NULL };
+static const char *roficmd[]   = { "rofi", "-show", "drun", NULL };
+static const char *rofipower[] = { "rofi", "-show", "power-menu", "-modi", "power-menu:rofi-power-menu", NULL };
+static const char *upvol[]     = { "amixer", "set", "Master", "2%+",     NULL };
+static const char *downvol[]   = { "amixer", "set", "Master", "2%-",     NULL };
+static const char *mutevol[]   = { "amixer", "set", "Master", "toggle",  NULL };
 static const char *shutdown[]  = { "shutdown", "-P", "now", NULL };
 
 static const Key keys[] = {
@@ -179,7 +178,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ControlMask,           XK_q,      quit,           {0} },
-  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = shutdown} },
+  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = rofipower} },
 };
 
 /* button definitions */
